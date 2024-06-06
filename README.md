@@ -1,6 +1,6 @@
-# Project Title: LearnBot
+# Project Title: IntelliCart
 
-## Team Name: KnowledgeHunters
+## Team Name: ShoppingApes
 
 ### Team Members:
 - Minjun Kim - minjunn.kim@mail.utoronto.ca
@@ -8,40 +8,38 @@
 
 
 ### Brief Description of the Web Application:
-LearnBot is an AI-powered full stack application designed to facilitate personalized learning. Users can input a prompt on a topic they wish to learn, and the application will generate comprehensive notes, flashcards, and quizzes. The platform supports course-based learning, tracking user progress, and adapting to different difficulty levels within each topic. This structured approach ensures a seamless learning experience from basics to advanced levels.
+IntelliCart is a web application designed to simplify your shopping experience. Users can input their shopping list or specify a project they wish to undertake, such as baking a cake or building a shed. IntelliCart then intelligently maps out the nearest stores that have the required materials, highlighting the ones with the best prices. This ensures users can efficiently gather everything they need while saving money.
 
 ### Required Elements:
 - **User Authentication**: Implement secure login and registration for users.
-- **Prompt Input**: Allow users to input a learning prompt on a specific topic.
-- **AI Integration**: Use AI to generate notes, flashcards, and quizzes based on the user's prompt.
-- **Course Structure**: Design a course framework that guides users from basic to advanced levels within each topic.
-- **Progress Tracking**: Track user progress and adapt the difficulty of the content accordingly.
-- **Quizzes and Assessments**: Create quizzes to assess user understanding before advancing to the next level.
+- **Prompt Input**: Allow users to input a list of shopping material they want.
+- **AI Integration**: Use AI to generate what elements are needed in a User's build (what ingredients will be needed to make a cake).
+- **Mapping**: Displaying the locations of the stores on a map.
+- **Price Comparison**: Identifying the cheapest options for the required materials..
 - **Responsive Design**: Ensure the application is accessible on various devices (desktop, tablet, mobile).
 
 ### Additional Requirements:
-- **User Dashboard**: Develop a dashboard for users to view their progress and upcoming topics.
-- **Leaderboard**: Implement a leaderboard to foster competition and engagement among users.
-- **Notification System**: Send reminders and notifications for upcoming quizzes or new content availability.
-- **Gamification**: Incorporate gamification elements like badges and rewards to motivate users.
+- **User Dashboard**: Develop a dashboard for users to view their shopping carts.
+- **Previous Purchases**: Implement a system that tracks the User's previous purchases and/or which shops they have gone too.
+- **Recommender**: Based on previous user inputs, recommend possibly other items they may also want to purchase.
 - **Feedback Mechanism**: Allow users to provide feedback on generated content for continuous improvement.
 
 ### Milestones:
 - **Alpha Version**:
   - Basic user authentication
   - Prompt input functionality
-  - Initial AI-generated notes and flashcards
-  - Basic course structure and progress tracking
+  - Initial AI-generated shopping list based on user input
+  - Basic map displaying nearest stores
 
 - **Beta Version**:
-  - Enhanced AI content generation
-  - Full quiz implementation and assessments
-  - User dashboard with progress tracking
+  - Enhanced AI content generation for project requirements
+  - Initial price comparison functionality
+  - User dashboard with shopping cart and previous purchases tracking
   - Responsive design implementation
 
 - **Final Version**:
-  - Complete course structure with all difficulty levels
-  - Leaderboard and gamification elements
-  - Notification system
+  - Complete mapping with optimized routes and all nearby stores
+  - Full price comparison engine with real-time updates
+  - Recommender system for additional items
   - User feedback mechanism
   - Final bug fixes and performance improvements
