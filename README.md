@@ -4,6 +4,7 @@
 
 ### Team Members:
 - Minjun Kim - minjunn.kim@mail.utoronto.ca
+- Vedat Alp Goktepe - vedat.goktepe@mail.utoronto.ca
 - Ashwin Mallik - ashwin.mallik@mail.utoronto.ca
 
 ### Brief Description of the Web Application:
