@@ -3,7 +3,9 @@
 ## Team Name: KnowledgeHunters
 
 ### Team Members:
-- Minjun Kim - minjunn.kim@maik.utoronto.ca
+- Minjun Kim - minjunn.kim@mail.utoronto.ca
+- Ashwin Mallik - ashwin.mallik@mail.utoronto.ca
+
 
 ### Brief Description of the Web Application:
 LearnBot is an AI-powered full stack application designed to facilitate personalized learning. Users can input a prompt on a topic they wish to learn, and the application will generate comprehensive notes, flashcards, and quizzes. The platform supports course-based learning, tracking user progress, and adapting to different difficulty levels within each topic. This structured approach ensures a seamless learning experience from basics to advanced levels.
