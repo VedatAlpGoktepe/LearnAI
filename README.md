@@ -1,6 +1,6 @@
-# Project Title: IntelliCart
+# Project Title: LearnAI
 
-## Team Name: ShoppingApes
+## Team Name: SmartTutors
 
 ### Team Members:
 - Minjun Kim - minjunn.kim@mail.utoronto.ca
@@ -8,14 +8,12 @@
 - Ashwin Mallik - ashwin.mallik@mail.utoronto.ca
 
 ### Brief Description of the Web Application:
-IntelliCart is a web application designed to simplify your shopping experience. Users can input their shopping list or specify a project they wish to undertake, such as baking a cake or building a shed. IntelliCart then intelligently maps out the nearest stores that have the required materials, highlighting the ones with the best prices. This ensures users can efficiently gather everything they need while saving money.
+LearnAI is a web application designed to support your learning experience. Users can input their desired topics they wish to learn or improve in, such as data structures or making a website. LearnAI then intelligently makes a simple course to follow that teaches the user about the topic. By teaching concepts in increasing difficulty from low to medium to high, it ensures usability even for topics the user is unfamiliar with.
 
 ### Required Elements
 - **User Authentication**: Implement secure login and registration for users.
-- **Prompt Input**: Allow users to input a list of shopping materials they want.
-- **AI Integration**: Use AI to generate what elements are needed in a user's build (e.g., what ingredients will be needed to make a cake).
-- **Mapping**: Display the locations of the stores on a map.
-- **Price Comparison**: Identify the cheapest options for the required materials.
+- **Prompt Input**: Allow users to input a topic/topics they want to learn.
+- **AI Integration**: Use AI to generate what a collection of content the user can use to learn said topic (e.g. relevant information, images/diagrams, flashcards, quizzes).
 - **Responsive Design**: Ensure the application is accessible on various devices (desktop, tablet, mobile).
 
 - **Frontend Framework:**
@@ -33,8 +31,6 @@ IntelliCart is a web application designed to simplify your shopping experience. 
 
 - **Third-party API:**
   - The application will interact with several third-party APIs, including:
-    - **Google Maps API** for route planning.
-    - **Stripe** for payment processing.
     - **GPT (OpenAI)** for AI chat functionality.
   - We will monitor usage limits in the free tier to ensure continuous functionality.
 
@@ -43,30 +39,28 @@ IntelliCart is a web application designed to simplify your shopping experience. 
 
 ### Additional Requirements
 - **Webhook Interaction:**
-  - A piece of the application will interact with a webhook by an external service. For example, Stripe can send webhooks to notify the application of payment events.
+  - A piece of the application will interact with a webhook by an external service. For example, if a user has connected their phone number to their account, using Twilio webhooks, the application can generate content for their accounts through text messages.
 
 - **Real-time Functionality:**
-  - The application will include real-time functionality, such as reflecting other user changes without refreshing. This can be achieved using WebSockets or a similar technology to update item availability in real-time.
+  - The application will include real-time functionality, such as notifying user A, when user B has shared one of their generated courses with them, without needing to refresh the page. This can be achieved using WebSockets, SSE, or a similar technology to send updates in real-time.
 
 - **Long-running Task:**
-  - The application will include functionality that executes a long-running task, such as processing and aggregating data from multiple third-party APIs to provide comprehensive shopping suggestions and route planning. This task could take more than 10 seconds to complete.
+  - The application will include functionality that executes a long-running task, such as generating various learning materials (text, diagrams, quizzes, etc.) through, and aggregating the data from third-party APIs such as GPT to provide a comprehensive learning experience. This task could take more than 10 seconds to complete.
 
 ### Milestones
 - **Alpha Version**:
   - Basic user authentication
   - Prompt input functionality
-  - Initial AI-generated shopping list based on user input
-  - Basic map displaying nearest stores
+  - Initial AI-generated content based on user input
 
 - **Beta Version**:
   - Enhanced AI content generation for project requirements
-  - Initial price comparison functionality
-  - User dashboard with shopping cart and previous purchases tracking
+  - Initial share/text functionality
+  - User generated course history
   - Responsive design implementation
 
 - **Final Version**:
-  - Complete mapping with optimized routes and all nearby stores
-  - Full price comparison engine with real-time updates
-  - Recommender system for additional items
+  - Complete content generation with flashcards, quizzes, and images/diagrams when necessary
+  - Real-time updates/notifications for interaction between users and generation using webhooks
   - User feedback mechanism
   - Final bug fixes and performance improvements
