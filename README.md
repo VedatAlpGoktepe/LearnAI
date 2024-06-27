@@ -17,21 +17,21 @@ LearnAI is a web application designed to support your learning experience. Users
 - **Responsive Design**: Ensure the application is accessible on various devices (desktop, tablet, mobile).
 
 - **Frontend Framework:**
-  - The application will use **Angular** as the modern frontend framework.
+  - The application will use **[Angular](https://angular.io/)** as the modern frontend framework.
   - It will be a **Single Page Application (SPA)** to ensure a seamless user experience.
   
 - **Backend API:**
-  - **Express** will be used as the core backend API.
+  - **[Express](https://expressjs.com/)** will be used as the core backend API.
   - The API will be designed to be **RESTful** where appropriate to ensure standard communication protocols.
 
 - **Deployment:**
-  - The application will be deployed on a **Virtual Machine using Docker and Docker Compose**.
+  - The application will be deployed on a **Virtual Machine using [Docker](https://www.docker.com/) and [Docker Compose](https://docs.docker.com/compose/)**.
   - All deployment files, including **CI files for building images**, will be committed to GitHub.
   - The application will be accessible to the general public without any extra steps.
 
 - **Third-party API:**
   - The application will interact with several third-party APIs, including:
-    - **GPT (OpenAI)** for AI chat functionality.
+    - **[GPT (OpenAI)](https://openai.com/api/)** for AI chat functionality.
   - We will monitor usage limits in the free tier to ensure continuous functionality.
 
 - **OAuth 2.0:**
@@ -64,3 +64,16 @@ LearnAI is a web application designed to support your learning experience. Users
   - Real-time updates/notifications for interaction between users and generation using webhooks
   - User feedback mechanism
   - Final bug fixes and performance improvements
+
+
+### Tech Stack
+- **Frontend:** [Angular](https://angular.io/)
+- **Backend:** [Express](https://expressjs.com/), [Node.js](https://nodejs.org/)
+- **Database:** [PostgreSQL](https://www.postgresql.org/)
+- **Deployment:** [Docker](https://www.docker.com/), [Docker Compose](https://docs.docker.com/compose/)
+- **AI Integration:** [GPT (OpenAI)](https://openai.com/api/)
+- **Authentication:** OAuth 2.0
+- **Real-time Updates:** WebSockets, SSE
+- **Webhooks:** Twilio
+- **OAuth 2.0:**
+  - The application will implement **OAuth 2.0** for user authentication and authorization to secure access to the application.
