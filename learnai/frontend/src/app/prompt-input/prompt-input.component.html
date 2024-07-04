@@ -1,0 +1,12 @@
+<div class="prompt-input-container">
+  <h2>Enter a Topic to Learn</h2>
+  <form (submit)="onSubmit()">
+    <label for="prompt">Topic:</label>
+    <input type="text" id="prompt" [(ngModel)]="prompt" name="prompt" required>
+    <button type="submit">Generate Content</button>
+  </form>
+  <div *ngIf="generatedContent" class="generated-content">
+    <h3>Generated Content:</h3>
+    <p>{{ generatedContent }}</p>
+  </div>
+</div>
