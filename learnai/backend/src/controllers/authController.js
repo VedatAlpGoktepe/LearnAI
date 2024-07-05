@@ -23,7 +23,7 @@ exports.login = async (req, res) => {
       return res.status(401).json({ message: 'Invalid password' });
     }
     const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET);
-    res.json({ token });
+    res.json({ token, username: user.username});
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

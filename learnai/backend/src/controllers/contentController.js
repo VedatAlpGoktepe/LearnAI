@@ -1,21 +1,26 @@
-const { Configuration, OpenAIApi } = require("openai");
+const { OpenAI } = require("openai");
 
-const configuration = new Configuration({
+const openai = new OpenAI({
   apiKey: process.env.OPENAI_API_KEY,
 });
-
-const openai = new OpenAIApi(configuration);
 
 exports.generateContent = async (req, res) => {
   const { prompt } = req.body;
   try {
-    const response = await openai.createChatCompletion({
-      model: "text-davinci-002",
+    const completion = await openai.chat.completions.create({
+      model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
-      max_tokens: 100,
     });
-    res.json(response.data.choices[0].message.content);
+
+    console.log('OpenAI API response:', completion); // Log the full response
+
+    if (completion.choices && completion.choices.length > 0) {
+      res.json(completion.choices[0].message.content);
+    } else {
+      res.status(500).send({ error: 'Invalid response structure from OpenAI API', details: completion });
+    }
   } catch (error) {
-    res.status(500).send(error.message);
+    console.error('Error generating content:', error.message);
+    res.status(500).send({ error: 'Error generating content', details: error.message });
   }
 };
