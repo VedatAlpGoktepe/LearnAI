@@ -1,31 +1,39 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const contentRoutes = require('./routes/contentRoutes');
-const { Sequelize } = require('sequelize');
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { contentRouter } from "./routers/contentRouter.js";
+import { sequelize } from "./datasource.js";
 
-const app = express();
-app.use(cors());
+export const app = express();
+const PORT = 3000;
+
+app.use(cors({
+  origin: "*", // Allow all origins
+}));
+
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/api/content', contentRoutes);
 
-const sequelize = new Sequelize(process.env.DATABASE_URL);
+try {
+  await sequelize.authenticate();
+  // Automatically detect all of your defined models and create (or modify) the tables for you.
+  // This is not recommended for production-use, but that is a topic for a later time!
+  await sequelize.sync({ alter: { drop: false }, logging: console.log() });
+  console.log("Connection has been established successfully.");
+  // console.log(User.getAttributes());
+  // console.log(Message.getAttributes());
+} catch (error) {
+  console.error("Unable to connect to the database:", error);
+}
 
-sequelize.authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-    return sequelize.sync(); // Ensure the database is in sync with the models
-  })
-  .then(() => {
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+app.use(function (req, res, next) {
+  console.log("HTTP request", req.method, req.url, req.body);
+  next();
+});
 
-app.get('/', (req, res) => {
-  res.send('Hello from Express!');
+app.use("/api/content", contentRouter);
+
+app.listen(PORT, (err) => {
+  if (err) console.log(err);
+  else console.log("HTTP server on http://localhost:%s", PORT);
 });

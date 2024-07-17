@@ -1,1 +1,14 @@
-<p>generate-lesson works!</p>
+<div class="generate-lesson">
+  <h1>Generate Lesson</h1>
+  <div class="form-group">
+    <label for="lessonName">Lesson Name</label>
+    <input type="text" class="form-control" id="lessonName" [(ngModel)]="subject" placeholder="Enter lesson name">
+    <button type="submit" (click)="makeRequest()">Generate Lesson</button>
+    <div *ngIf="response">
+      <h2>Lesson Generated</h2>
+      <div class="content-container" [innerHTML]="response">
+
+      </div>
+    </div>
+  </div>
+</div>

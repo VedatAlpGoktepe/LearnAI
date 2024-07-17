@@ -1,10 +1,10 @@
-const { OpenAI } = require("openai");
+import OpenAI from 'openai';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+  apiKey: "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",
 });
 
-exports.generateContent = async (req, res) => {
+export const generateLesson = async (req, res) => {
   const { prompt } = req.body;
   try {
     const completion = await openai.chat.completions.create({
