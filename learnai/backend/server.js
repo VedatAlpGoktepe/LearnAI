@@ -1,15 +1,12 @@
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
-const authRoutes = require('./src/routes/authRoutes');
-const contentRoutes = require('./src/routes/contentRoutes');
+const contentRoutes = require('./routes/contentRoutes');
 const { Sequelize } = require('sequelize');
-const User = require('./src/models/User');
 
 const app = express();
 app.use(cors());
 app.use(bodyParser.json());
-app.use('/api/auth', authRoutes);
 app.use('/api/content', contentRoutes);
 
 const sequelize = new Sequelize(process.env.DATABASE_URL);
