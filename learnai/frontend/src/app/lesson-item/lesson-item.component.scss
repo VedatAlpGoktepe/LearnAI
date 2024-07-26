@@ -1,0 +1,20 @@
+.lesson-div {
+  width: 100%;
+  min-height: 50px;
+  height: fit-content;
+  padding: 5px;
+  display: flex;
+  align-items: center;
+  background-color: #afafaf;
+  border-bottom: 1px solid black;
+}
+
+.lesson-title {
+  margin: auto;
+  font-size: 1rem;
+}
+
+.lesson-div:hover {
+  background-color: #9c9c9c;
+  cursor: pointer;
+}

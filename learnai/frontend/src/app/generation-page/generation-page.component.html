@@ -1,0 +1,18 @@
+<div class="main-container">
+  <div class="system-messages">
+    <div class="scrolled-bottom">
+      <div class="system-prompt" *ngIf="lesson !== null">
+        <app-chat *ngFor="let chat of chats" [chat]="chat"></app-chat>
+      </div>
+    </div>
+    
+    <div class="status-messages system-prompt">
+      <span *ngIf="!firstRequest && !generated">Generating...</span> <!-- replace with possible animation later -->
+      <span *ngIf="error">Sorry, something went wrong. Please try again.</span>
+      <span *ngIf="firstRequest">What would you like to learn?</span>
+    </div>
+  </div>
+  <div class="user-input">
+    <input class="input-box" type="text" placeholder="Enter a topic/subject to learn" [(ngModel)]="textPrompt" (keyup.enter)="generate(input)" #input>
+  </div>
+</div>

@@ -1,34 +1,26 @@
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
-const authRoutes = require('./src/routes/authRoutes');
-const contentRoutes = require('./src/routes/contentRoutes');
-const { Sequelize } = require('sequelize');
-const User = require('./src/models/User');
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import { contentRouter } from "./routers/contentRouter.js";
 
-const app = express();
-app.use(cors());
+export const app = express();
+const PORT = 3000;
+
+app.use(cors({
+  origin: "*", // Allow all origins
+}));
+
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
-app.use('/api/auth', authRoutes);
-app.use('/api/content', contentRoutes);
 
-const sequelize = new Sequelize(process.env.DATABASE_URL);
+app.use(function (req, res, next) {
+  console.log("HTTP request", req.method, req.url, req.body);
+  next();
+});
 
-sequelize.authenticate()
-  .then(() => {
-    console.log('Connection has been established successfully.');
-    return sequelize.sync(); // Ensure the database is in sync with the models
-  })
-  .then(() => {
-    const port = process.env.PORT || 3000;
-    app.listen(port, () => {
-      console.log(`Server running on port ${port}`);
-    });
-  })
-  .catch(err => {
-    console.error('Unable to connect to the database:', err);
-  });
+app.use("/api/content", contentRouter);
 
-app.get('/', (req, res) => {
-  res.send('Hello from Express!');
+app.listen(PORT, (err) => {
+  if (err) console.log(err);
+  else console.log("HTTP server on http://localhost:%s", PORT);
 });

@@ -1,6 +1,23 @@
-<nav>
-  <a routerLink="/login">Login</a>
-  <a routerLink="/register">Register</a>
-  <a routerLink="/prompt-input">Learn</a>
-</nav>
-<router-outlet></router-outlet>
+<app-header></app-header>
+<mat-sidenav-container>
+  <mat-sidenav class="sidenav" [opened]="open" mode="side">
+    <div class="sidenav-title">
+      <span class="sidenav-title-text">Past Lessons</span>
+    </div>
+    <div class="past-content">
+      <!-- <p *ngFor="let lesson of past_lessons">{{lesson.title}} {{lesson._id}}</p> -->
+      <app-lesson-item *ngFor="let lesson of past_lessons" [title]="lesson.title"
+        [id]="lesson._id" (lesson_selected)="selectLesson($event)"></app-lesson-item>
+    </div>
+  </mat-sidenav>
+  <mat-sidenav-container class="main-page">
+    <button mat-button matTooltip="View History" (click)="toggleSidenav()"> View History
+      <mat-icon color="black">view_sidebar</mat-icon>
+    </button>
+    <button mat-button matTooltip="Generate New Lesson" (click)="generateNewLesson()"> Generate New Lesson
+      <mat-icon color="black">add</mat-icon>
+    </button>
+    <app-generation-page (lesson_saved)="refreshContent()" [id]="selected_lesson"></app-generation-page>
+  </mat-sidenav-container>
+</mat-sidenav-container>
+<router-outlet />
