@@ -1,0 +1,23 @@
+.user {
+  text-align: right;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  height: max-content;
+  padding: 10px
+}
+
+.message {
+  max-width: 80%;
+  width: fit-content;
+  padding: 10px;
+  background-color: #c0c0c0;
+}
+
+.system {
+  max-width: 80%;
+  width: fit-content;
+  text-align: left;
+  padding: 10px;
+  background-color: #b6b6b6;
+}

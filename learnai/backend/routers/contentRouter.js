@@ -1,9 +1,16 @@
 import { Router } from 'express';
 import OpenAI from 'openai';
+import mongoose from 'mongoose';
+import Lesson from '../models/Lesson.js';
+import bodyParser from 'body-parser';
 
 const openai = new OpenAI({
   apiKey: "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",
 });
+
+const uri = "mongodb+srv://vedatalpgktp:110110Aa@learnai-data.cw4z9hy.mongodb.net/?retryWrites=true&w=majority&appName=LearnAI-Data";
+
+mongoose.connect(uri);
 
 export const contentRouter = Router();
 
@@ -11,39 +18,51 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
   const prompt = req.body.content;
   try {
     const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
+      model: "gpt-4o-mini",
       messages: [
-        {role: "system", content: `Given a topic/subject, you will generate a maximum of 5 Readings, Flashcards, and a Quiz in that order. with the following format.
-          <div class='readings-container subcontainer'>
-            <h2 id='readingTitle'>Readings</h2>
-            <h3 class='readingTitles'>[Reading 1 Name]</h3>
-            <p class='readingContent'>[Reading 1 Content]</p>
-            ...
-            <h3 class='reading-titles'>[Reading X Name]</h3>
-            <p class='reading-content'>[Reading X Content]</p>
-          </div>
-          <div class='flashcards-container subcontainer'>
-            <h2 class='flashcard-title'>Flashcards</h2>
-            <h3 class='flashcard-questions'>[Flashcard 1 Question]</h3>
-            <p class='flashcard-answers'>[Flashcard 1 Answer]</p>
-            ...
-            <h3 class='flashcard-questions'>[Flashcard Y Question]</h3>
-            <p class='flashcard-answers'>[Flashcard Y Answer]</p>
-          </div>
-          <div class='quiz-container subcontainer'>
-            <h2 class='quiz-title'>Quiz</h2>
-            <h3 class='quiz-questions'>Question 1: [question 1]</h3>
-            <p class='quiz-options'>[option 1]</p>
-            <p class='quiz-options quiz-answers'>[option 2]</p>
-            <p class='quiz-options'>[option 3]</p>
-            <p class='quiz-options'>[option 4]</p>
-            ...
-            <h3 class='quiz-questions'>Question Z: [question Z]</h3>
-            <p class='quiz-options'>[option 1]</p>
-            <p class='quiz-options quiz-answers'>[option 2]</p>
-            <p class='quiz-options'>[option 3]</p>
-            <p class='quiz-options'>[option 4]</p>
-          </div>
+        {role: "system", content: `Given the users prompt, find what topic the user wants to learn about. If you can't find a topic respond with {"error": "Couldn't find topic", "status": 500}.
+          You will generate as many readings required to teach the topic, with a minimum of 1 reading, with a minimum of 100 words per reading. The readings in the response should be in order of increasing difficulty or make sense to read in order.
+          You will generate as many flashcards required to teach the topic, with a minimum of 3 flashcards. The flashcards in the response should be unordered/randomized.
+          You will generate as many questions required to teach the topic, with a minimum of 5 questions. Make sure that there is only 1 correct answer. The questions in the response should be in order of increasing difficulty.
+          Return the data as a JSON with the following format.
+          {
+            "title": "Title of Lesson",
+            "readings" : [
+              {
+                "title": "Title of Reading 1",
+                "content": "Content of Reading 1"
+              },
+              {
+                "title": "Title of Reading 2",
+                "content": "Content of Reading 2"
+              },
+              ...,
+            ],
+            "flashcards" : [
+              {
+                "question": "Question 1",
+                "answer": "Answer 1"
+              },
+              {
+                "question": "Question 2",
+                "answer": "Answer 2"
+              },
+              ...,
+            ],
+            "quiz" : [
+              {
+                "question": "Question 1",
+                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+                "answer": "1" // Index of the correct answer in the options array (0-3)
+              },
+              {
+                "question": "Question 2",
+                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+                "answer": "3"
+              },
+              ...,
+            ]
+          }
           `
         },
         { role: "user", content: prompt }
@@ -53,12 +72,137 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
     console.log('OpenAI API response:', completion); // Log the full response
 
     if (completion.choices && completion.choices.length > 0) {
-      res.json(completion.choices[0].message.content);
+      res.status(200).json(completion.choices[0].message.content);
     } else {
       res.status(500).send({ error: 'Invalid response structure from OpenAI API', details: completion });
     }
   } catch (error) {
     console.error('Error generating content:', error.message);
     res.status(500).send({ error: 'Error generating content', details: error.message });
+  }
+});
+
+contentRouter.post('/improve-lesson', async function (req, res, next) {
+  const lessonData = req.body.content;
+  const userInput = req.body.textPrompt;
+  try {
+    const completion = await openai.chat.completions.create({
+      model: "gpt-4o-mini",
+      messages: [
+        {role: "system", content: `Given a JSON of previously generated lessons and user inputs, edit the latest lesson based on the input.
+          If necessary, you will update existing readings to teach the topic and/or generate new readings if required, with any reading output has a minimum of 100 words. The readings in the response should be in order of increasing difficulty or make sense to read in order.
+          If necessary, you will update existing flashcards to teach the topic and/or generate new flashcards if required. The flashcards in the response should be unordered/randomized.
+          If necessary, you will update existing questions to teach the topic and/or generate new questions if required. Make sure that there is only 1 correct answer. The questions in the response should be in order of increasing difficulty.
+          Return the new lesson data as a JSON with the following format.
+          {
+            "readings" : [
+              {
+                "title": "Title of Reading 1",
+                "content": "Content of Reading 1"
+              },
+              {
+                "title": "Title of Reading 2",
+                "content": "Content of Reading 2"
+              },
+              ...,
+            ],
+            "flashcards" : [
+              {
+                "question": "Question 1",
+                "answer": "Answer 1"
+              },
+              {
+                "question": "Question 2",
+                "answer": "Answer 2"
+              },
+              ...,
+            ],
+            "quiz" : [
+              {
+                "question": "Question 1",
+                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+                "answer": "1" // Index of the correct answer in the options array (0-3)
+              },
+              {
+                "question": "Question 2",
+                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
+                "answer": "3"
+              },
+              ...,
+            ]
+          }
+          `
+        },
+        { role: "user", content: lessonData + userInput }
+      ],
+    });
+
+    console.log('OpenAI API response:', completion); // Log the full response
+
+    if (completion.choices && completion.choices.length > 0) {
+      res.status(200).json(completion.choices[0].message.content);
+    } else {
+      res.status(500).send({ error: 'Invalid response structure from OpenAI API', details: completion });
+    }
+  } catch (error) {
+    console.error('Error generating content:', error.message);
+    res.status(500).send({ error: 'Error generating content', details: error.message });
+  }
+});
+
+contentRouter.post('/save-lesson', async function (req, res, next) {
+  const lessonData = req.body.content;
+  lessonData.username = "admin";
+  try {
+    const lesson = await Lesson.create(lessonData);
+    res.status(200).json({ message: 'Lesson saved successfully', lesson });
+  } catch (error) {
+    console.error('Error saving lesson:', error.message);
+    res.status(500).send({ error: 'Error saving lesson', details: error.message });
+  }
+});
+
+contentRouter.post('/update-lesson/:id', async function (req, res, next) {
+  const lessonData = req.body.content;
+  const id = req.params.id;
+  try {
+    const lesson = await Lesson.findByIdAndUpdate(id, lessonData, { new: true }).exec();
+    if (lesson) {
+      res.status(200).json({ message: 'Lesson updated successfully', lesson });
+    } else {
+      res.status(404).send({ error: 'Lesson not found', id });
+    }
+  } catch (error) {
+    console.error('Error updating lesson:', error.message);
+    res.status(500).send({ error: 'Error updating lesson', details: error.message });
+  }
+});
+
+contentRouter.get('/lessons/:id', async function (req, res, next) {
+  const id = req.params.id;
+  try {
+    const lesson = await Lesson.findById(id);
+    if (lesson) {
+      res.status(200).json(lesson);
+    } else {
+      res.status(404).send({ error: 'Lesson not found', id });
+    }
+  } catch (error) {
+    console.error('Error fetching lesson:', error.message);
+    res.status(500).send({ error: 'Error fetching lesson', details: error.message });
+  }
+});
+
+contentRouter.get('/lessons', async function (req, res, next) {
+  try {
+    const lessons = await Lesson.find({username: "admin"}, {title: 1}).sort({ updatedAt: -1 });
+    if (lessons) {
+      res.status(200).json(lessons);
+    } else {
+      res.status(404).send({ error: 'Lesson not found', id });
+    }
+  } catch (error) {
+    console.error('Error fetching lesson:', error.message);
+    res.status(500).send({ error: 'Error fetching lesson', details: error.message });
   }
 });

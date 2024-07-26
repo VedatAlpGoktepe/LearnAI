@@ -1,0 +1,8 @@
+<div class="user">
+  <div class="message">{{chat.user}}</div>
+</div>
+<div class="system">
+  <app-reading *ngFor="let reading of chat.response.readings" [title]="reading.title" [content]="reading.content"></app-reading>
+  <app-flashcard *ngFor="let flashcard of chat.response.flashcards" [question]="flashcard.question" [answer]="flashcard.answer"></app-flashcard>
+  <app-question *ngFor="let question of chat.response.quiz" [question]="question.question" [options]="question.options" [answer]="question.answer"></app-question>
+</div>
