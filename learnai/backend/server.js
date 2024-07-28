@@ -3,6 +3,7 @@ import cors from "cors";
 import bodyParser from "body-parser";
 import { contentRouter } from "./routers/contentRouter.js";
 import { accountRouter } from "./routers/accountRouter.js";
+import { twilioRouter } from "./routers/twilioRouter.js";
 
 export const app = express();
 const PORT = 3000;
@@ -21,6 +22,7 @@ app.use(function (req, res, next) {
 
 app.use("/api/content", contentRouter);
 app.use("/api/account", accountRouter);
+app.use("/api/twilio", twilioRouter);
 
 app.listen(PORT, (err) => {
   if (err) console.log(err);
