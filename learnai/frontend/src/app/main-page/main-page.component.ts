@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+declare var google: any;
+
+import { Component, inject } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { GenerationPageComponent } from "../generation-page/generation-page.component";
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -8,6 +10,7 @@ import { MatTooltipModule } from '@angular/material/tooltip';
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { LessonItemComponent } from "../lesson-item/lesson-item.component";
 import { NgFor } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-main-page',
@@ -18,6 +21,8 @@ import { NgFor } from '@angular/common';
   styleUrl: './main-page.component.scss'
 })
 export class MainPageComponent {
+  private router = inject(Router);
+
   open = false;
   past_lessons: any = null;
 
@@ -44,7 +49,9 @@ export class MainPageComponent {
   }
 
   logout() {
-    
+    sessionStorage.removeItem('loggedIn');
+    google.accounts.id.disableAutoSelect();
+    this.router.navigate(['']);
   }
 
   ngOnInit() {
