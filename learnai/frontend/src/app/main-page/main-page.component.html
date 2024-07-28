@@ -10,13 +10,22 @@
         [id]="lesson._id" (lesson_selected)="selectLesson($event)"></app-lesson-item>
     </div>
   </mat-sidenav>
-  <mat-sidenav-container class="main-page">
-    <button mat-button matTooltip="View History" (click)="toggleSidenav()"> View History
-      <mat-icon color="black">view_sidebar</mat-icon>
-    </button>
-    <button mat-button matTooltip="Generate New Lesson" (click)="generateNewLesson()"> Generate New Lesson
-      <mat-icon color="black">add</mat-icon>
-    </button>
+  <mat-sidenav-container>
+    <div class="main-page">
+      <div class="lesson-buttons">
+        <button mat-button matTooltip="View History" (click)="toggleSidenav()"> View History
+          <mat-icon color="black">view_sidebar</mat-icon>
+        </button>
+        <button mat-button matTooltip="Generate New Lesson" (click)="generateNewLesson()"> Generate New Lesson
+          <mat-icon color="black">add</mat-icon>
+        </button>
+      </div>
+      <div class="account-buttons">
+        <button mat-button matTooltip="Logout" (click)="logout()"> Logout
+          <mat-icon color="black">logout</mat-icon>
+        </button>
+      </div>
+    </div>
     <app-generation-page (lesson_saved)="refreshContent($event)" [id]="selected_lesson"></app-generation-page>
   </mat-sidenav-container>
 </mat-sidenav-container>

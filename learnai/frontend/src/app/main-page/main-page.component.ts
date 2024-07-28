@@ -43,6 +43,10 @@ export class MainPageComponent {
     this.selected_lesson = id;
   }
 
+  logout() {
+    
+  }
+
   ngOnInit() {
     this.refreshContent('');
   }
