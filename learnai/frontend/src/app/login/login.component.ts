@@ -15,6 +15,10 @@ export class LoginComponent implements OnInit {
   private router = inject(Router);
   
   ngOnInit() {
+    if(sessionStorage.getItem('loggedIn')) {
+      this.router.navigate(['/main']);
+    }
+
     google.accounts.id.initialize({
       client_id: '475894528162-m1t91fok6p6k6g1c3nvno6ou20d14cvb.apps.googleusercontent.com',
       callback: (response: any) => this.handleGoogleLogin(response)

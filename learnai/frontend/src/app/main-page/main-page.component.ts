@@ -55,6 +55,9 @@ export class MainPageComponent {
   }
 
   ngOnInit() {
+    if(!sessionStorage.getItem('loggedIn')) {
+      this.router.navigate(['']);
+    }
     this.refreshContent('');
   }
 }
