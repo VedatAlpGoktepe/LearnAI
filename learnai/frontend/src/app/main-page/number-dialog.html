@@ -1,0 +1,12 @@
+<h2 mat-dialog-title>Add/Change Your Phone Number</h2>
+<mat-dialog-content>
+  <p>Ex. 1234567890</p>
+  <mat-form-field>
+    <mat-label>Phone Number</mat-label>
+    <input matInput [(ngModel)]="number" />
+  </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+  <button mat-button (click)="onNoClick()">Cancel</button>
+  <button mat-button [mat-dialog-close]="number()" cdkFocusInitial>Ok</button>
+</mat-dialog-actions>

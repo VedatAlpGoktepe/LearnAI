@@ -31,3 +31,40 @@ accountRouter.post('/login', async function (req, res, next) {
     res.status(500).send({ error: 'Error finding user', details: error.message });
   }
 });
+
+accountRouter.get('/user/', async function (req, res, next) {
+  const email = req.headers.email;
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      res.status(404).send({ message: 'User not found' });
+    }
+    else {
+      res.status(200).send({ message: 'User found', user });
+    }
+  } catch (error) {
+    console.error('An Error Occurred:', error.message);
+    res.status(500).send({ error: 'Error finding user', details: error.message });
+  }
+});
+
+accountRouter.put('/user/number', async function (req, res, next) {
+  const email = req.body.email;
+  const number = req.body.number;
+
+  try {
+    const user = await User.findOne({ email: email });
+    if (!user) {
+      res.status(404).send({ message: 'User not found' });
+    }
+    else {
+      user.number = number;
+      await user.save();
+      console.log(user);
+      res.status(200).send({ message: 'Number updated', user });
+    }
+  } catch (error) {
+    console.error('An Error Occurred:', error.message);
+    res.status(500).send({ error: 'Error updating number', details: error.message });
+  }
+});

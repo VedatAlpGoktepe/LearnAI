@@ -24,6 +24,9 @@
         <button mat-button matTooltip="Logout" (click)="logout()"> Logout
           <mat-icon color="black">logout</mat-icon>
         </button>
+        <button mat-button matTooltip="Add Number" (click)="openDialog()">Add/Change Number
+          <mat-icon color="black">phone</mat-icon>
+        </button>
       </div>
     </div>
     <app-generation-page (lesson_saved)="refreshContent($event)" [id]="selected_lesson"></app-generation-page>
