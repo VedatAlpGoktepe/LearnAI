@@ -1,6 +1,6 @@
 declare var google: any;
 
-import { Component, inject } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { Router } from '@angular/router';
 
@@ -11,13 +11,13 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
-export class LoginComponent {
+export class LoginComponent implements OnInit {
   private router = inject(Router);
   
   ngOnInit() {
     google.accounts.id.initialize({
       client_id: '475894528162-m1t91fok6p6k6g1c3nvno6ou20d14cvb.apps.googleusercontent.com',
-      callback: this.handleGoogleLogin
+      callback: (response: any) => this.handleGoogleLogin(response)
     });
     
     google.accounts.id.renderButton(document.getElementById("google-btn"), {
@@ -35,7 +35,7 @@ export class LoginComponent {
       //store token in current session
       sessionStorage.setItem('loggedIn', JSON.stringify(token));
       //go to main page with routermodule
-      this.router.navigate(['main']);
+      this.router.navigate(['/main']);
     }
   }
 }
