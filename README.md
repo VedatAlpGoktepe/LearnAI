@@ -3,9 +3,9 @@
 ## Team Name: SmartTutors
 
 ### Team Members:
-- Minjun Kim - minjunn.kim@mail.utoronto.ca
 - Vedat Alp Goktepe - vedat.goktepe@mail.utoronto.ca
-- Ashwin Mallik - ashwin.mallik@mail.utoronto.ca
+- ~~Minjun Kim - minjunn.kim@mail.utoronto.ca~~
+- ~~Ashwin Mallik - ashwin.mallik@mail.utoronto.ca~~
 
 ### Brief Description of the Web Application:
 LearnAI is a web application designed to support your learning experience. Users can input their desired topics they wish to learn or improve in, such as data structures or making a website. LearnAI then intelligently makes a simple course to follow that teaches the user about the topic. By teaching concepts in increasing difficulty from low to medium to high, it ensures usability even for topics the user is unfamiliar with.
