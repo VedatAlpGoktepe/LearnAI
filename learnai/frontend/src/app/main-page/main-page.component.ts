@@ -40,7 +40,9 @@ export class MainPageComponent {
 
   refreshContent(id: string) {
     this.selected_lesson = id;
-    this.httpClient.get<any>('http://localhost:3000/api/content/lessons', { headers: {'Accept': 'text/html', 'responseType': 'text'}})
+    let token = sessionStorage.getItem('loggedIn');
+    let email = JSON.parse(token ? token : '').email;
+    this.httpClient.get<any>('http://localhost:3000/api/content/lessons', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
     .subscribe((response) => {this.past_lessons = response});
   }
 

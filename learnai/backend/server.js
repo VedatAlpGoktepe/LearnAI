@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import bodyParser from "body-parser";
 import { contentRouter } from "./routers/contentRouter.js";
+import { accountRouter } from "./routers/accountRouter.js";
 
 export const app = express();
 const PORT = 3000;
@@ -19,6 +20,7 @@ app.use(function (req, res, next) {
 });
 
 app.use("/api/content", contentRouter);
+app.use("/api/account", accountRouter);
 
 app.listen(PORT, (err) => {
   if (err) console.log(err);

@@ -2,18 +2,22 @@ declare var google: any;
 
 import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [HeaderComponent],
+  imports: [HeaderComponent, HttpClientModule],
   templateUrl: './login.component.html',
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
   private router = inject(Router);
   
+
+  constructor(private httpClient: HttpClient) {}
+
   ngOnInit() {
     if(sessionStorage.getItem('loggedIn')) {
       this.router.navigate(['/main']);
@@ -36,10 +40,13 @@ export class LoginComponent implements OnInit {
     if(response) {
       //decode token
       let token = JSON.parse(atob(response.credential.split('.')[1]));
-      //store token in current session
-      sessionStorage.setItem('loggedIn', JSON.stringify(token));
-      //go to main page with routermodule
-      this.router.navigate(['/main']);
+      this.httpClient.post<any>('http://localhost:3000/api/account/login', {token: token})
+      .subscribe(() => {
+        //store token in current session
+        sessionStorage.setItem('loggedIn', JSON.stringify(token));
+        //go to main page with routermodule
+        this.router.navigate(['/main']);
+      });
     }
   }
 }

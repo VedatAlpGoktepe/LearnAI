@@ -19,7 +19,7 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
   const email = req.body.email;
 
   try {
-    const user = await User.exists({ email: email });
+    const user = await User.findOne({ email: email });
     if (!user) {
       res.status(404).send({ error: 'User not found', email });
       return;
@@ -85,7 +85,29 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
     console.log('OpenAI API response:', completion); // Log the full response
 
     if (completion.choices && completion.choices.length > 0) {
-      res.status(200).json(completion.choices[0].message.content);
+      let generated = completion.choices[0].message.content;
+      let generatedParsed = JSON.parse(generated);
+      
+      let lessonData = {
+        title: generatedParsed.title,
+        email: email,
+        chats: [{
+          user: prompt,
+          response: {
+            readings: generatedParsed.readings,
+            flashcards: generatedParsed.flashcards,
+            quiz: generatedParsed.quiz
+          }
+        }]
+      }
+
+      try {
+        const lesson = await Lesson.create(lessonData);
+        res.status(200).json({ message: 'Lesson generated successfully', lesson });
+      } catch (error) {
+        console.error('Error saving lesson:', error.message);
+        res.status(500).send({ error: 'Error saving lesson', details: error.message });
+      }
     } else {
       res.status(500).send({ error: 'Invalid response structure from OpenAI API', details: completion });
     }
@@ -176,18 +198,6 @@ contentRouter.post('/improve-lesson', async function (req, res, next) {
   }
 });
 
-contentRouter.post('/save-lesson', async function (req, res, next) {
-  const lessonData = req.body.content;
-  lessonData.email = "admin@gmail.com";
-  try {
-    const lesson = await Lesson.create(lessonData);
-    res.status(200).json({ message: 'Lesson saved successfully', lesson });
-  } catch (error) {
-    console.error('Error saving lesson:', error.message);
-    res.status(500).send({ error: 'Error saving lesson', details: error.message });
-  }
-});
-
 contentRouter.post('/update-lesson/:id', async function (req, res, next) {
   const lessonData = req.body.content;
   const id = req.params.id;
@@ -220,8 +230,9 @@ contentRouter.get('/lessons/:id', async function (req, res, next) {
 });
 
 contentRouter.get('/lessons', async function (req, res, next) {
+  const email = req.headers.email;
   try {
-    const lessons = await Lesson.find({email: "admin@gmail.com"}, {title: 1}).sort({ updatedAt: -1 });
+    const lessons = await Lesson.find({email: email}, {title: 1}).sort({ updatedAt: -1 });
     if (lessons) {
       res.status(200).json(lessons);
     } else {

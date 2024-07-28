@@ -9,6 +9,7 @@ import { ChatComponent } from "../chat/chat.component";
 
 export class Lesson {
   title: string;
+  email: string;
   chats: [{
     user: string;
     response: {
@@ -18,8 +19,9 @@ export class Lesson {
     }
   }];
 
-  constructor(title: string, input: string, readings: any, flashcards: any, quiz: any) {
+  constructor(title: string, email: string, input: string, readings: any, flashcards: any, quiz: any) {
     this.title = title;
+    this.email = email;
     this.chats = [{
       user: input,
       response: {
@@ -69,39 +71,31 @@ export class GenerationPageComponent {
 
   generate(input: any) {
     if (this.textPrompt.trim() !== '') {
-      if (this.firstRequest === true) {
-        this.generated = false;
-        this.error = false;
+      this.generated = false;
+      this.error = false;
 
-        this.httpClient.post<any>('http://localhost:3000/api/content/generate-lesson', { content: this.textPrompt, email: "admin@gmail.com" }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
-        .subscribe((response) => {this.response = response}).add(() => {
+      if (this.firstRequest === true) {
+        let token = sessionStorage.getItem('loggedIn');
+        let email = JSON.parse(token ? token : '').email;
+
+        this.httpClient.post<any>('http://localhost:3000/api/content/generate-lesson', { content: this.textPrompt, email: email }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
+        .subscribe((response) => {
           this.generated = true;
-          let response_obj = JSON.parse(this.response);
-          if (response_obj.error) {
+          if (response.error) {
             this.error = true;
+            console.error(response.error);
             return;
           }
           else {
-            this.lesson = new Lesson(response_obj.title, this.textPrompt, response_obj.readings, response_obj.flashcards, response_obj.quiz);
+            this.lesson = response.lesson;
             this.chats = this.lesson.chats;
-            this.httpClient.post<any>('http://localhost:3000/api/content/save-lesson', { content: this.lesson})
-            .subscribe((response) => {
-              if (!response.error) {
-                this.id = response.lesson._id;
-                this.lesson_saved.emit(this.id);
-              }
-              else {
-                console.log('Error saving lesson');
-              }
-            });
+            this.id = response.lesson._id;
+            this.lesson_saved.emit(this.id);
+            this.firstRequest = false;
           }
         });
-        this.firstRequest = false;
       }
       else {
-        this.generated = false;
-        this.error = false;
-
         this.httpClient.post<any>('http://localhost:3000/api/content/improve-lesson', { content: JSON.stringify(this.lesson.chats), userInput: this.textPrompt, email: "admin@gmail.com" }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
         .subscribe((response) => {this.response = response}).add(() => {
           this.generated = true;
