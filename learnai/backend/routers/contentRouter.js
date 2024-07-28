@@ -27,6 +27,7 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
   } catch (error) {
     console.error('An Error Occurred:', error.message);
     res.status(500).send({ error: 'Error finding user', details: error.message });
+    return;
   }
 
   try {
@@ -37,7 +38,7 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
           You will generate as many readings required to teach the topic, with a minimum of 1 reading, with a minimum of 100 words per reading. The readings in the response should be in order of increasing difficulty or make sense to read in order.
           You will generate as many flashcards required to teach the topic, with a minimum of 3 flashcards. The flashcards in the response should be unordered/randomized.
           You will generate as many questions required to teach the topic, with a minimum of 5 questions. Make sure that there is only 1 correct answer. The questions in the response should be in order of increasing difficulty.
-          Return the data as a JSON with the following format.
+          Return the data as a string with the following format.
           {
             "title": "Title of Lesson",
             "readings" : [
@@ -104,21 +105,25 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
       try {
         const lesson = await Lesson.create(lessonData);
         res.status(200).json({ message: 'Lesson generated successfully', lesson });
+        return;
       } catch (error) {
         console.error('Error saving lesson:', error.message);
         res.status(500).send({ error: 'Error saving lesson', details: error.message });
+        return;
       }
     } else {
       res.status(500).send({ error: 'Invalid response structure from OpenAI API', details: completion });
+      return;
     }
   } catch (error) {
     console.error('Error generating content:', error.message);
     res.status(500).send({ error: 'Error generating content', details: error.message });
+    return;
   }
 });
 
-contentRouter.post('/improve-lesson', async function (req, res, next) {
-  const lessonData = req.body.content;
+contentRouter.post('/improve-lesson/:id', async function (req, res, next) {
+  const lessonData = req.body.lesson;
   const userInput = req.body.textPrompt;
   const email = req.body.email;
 
@@ -131,6 +136,7 @@ contentRouter.post('/improve-lesson', async function (req, res, next) {
   } catch (error) {
     console.error('An Error Occurred:', error.message);
     res.status(500).send({ error: 'Error finding user', details: error.message });
+    return;
   }
   
   try {
@@ -141,7 +147,7 @@ contentRouter.post('/improve-lesson', async function (req, res, next) {
           If necessary, you will update existing readings to teach the topic and/or generate new readings if required, with any reading output has a minimum of 100 words. The readings in the response should be in order of increasing difficulty or make sense to read in order.
           If necessary, you will update existing flashcards to teach the topic and/or generate new flashcards if required. The flashcards in the response should be unordered/randomized.
           If necessary, you will update existing questions to teach the topic and/or generate new questions if required. Make sure that there is only 1 correct answer. The questions in the response should be in order of increasing difficulty.
-          Return the new lesson data as a JSON with the following format.
+          Return the new lesson data as a string with the following format.
           {
             "readings" : [
               {
@@ -181,36 +187,50 @@ contentRouter.post('/improve-lesson', async function (req, res, next) {
           }
           `
         },
-        { role: "user", content: lessonData + userInput }
+        { role: "user", content: JSON.stringify(lessonData.chats) + userInput }
       ],
     });
 
     console.log('OpenAI API response:', completion); // Log the full response
 
     if (completion.choices && completion.choices.length > 0) {
-      res.status(200).json(completion.choices[0].message.content);
+      let generated = completion.choices[0].message.content;
+      let generatedParsed = JSON.parse(generated);
+      let id = req.params.id;
+      
+      console.log('user input:', userInput);
+
+      lessonData.chats.push({
+        user: userInput,
+        response: {
+          readings: generatedParsed.readings,
+          flashcards: generatedParsed.flashcards,
+          quiz: generatedParsed.quiz
+        }
+      });
+
+      try {
+        const lesson = await Lesson.findByIdAndUpdate(id, lessonData, { new: true });
+        if (lesson) {
+          res.status(200).json({ message: 'Lesson improved successfully', lesson });
+          return;
+        }
+        else {
+          res.status(404).send({ error: 'Lesson not found', id });
+          return;
+        }
+      } catch (error) {
+        console.error('Error saving lesson:', error.message);
+        res.status(500).send({ error: 'Error saving lesson', details: error.message });
+        return;
+      }
     } else {
       res.status(500).send({ error: 'Invalid response structure from OpenAI API', details: completion });
+      return;
     }
   } catch (error) {
     console.error('Error generating content:', error.message);
     res.status(500).send({ error: 'Error generating content', details: error.message });
-  }
-});
-
-contentRouter.post('/update-lesson/:id', async function (req, res, next) {
-  const lessonData = req.body.content;
-  const id = req.params.id;
-  try {
-    const lesson = await Lesson.findByIdAndUpdate(id, lessonData, { new: true });
-    if (lesson) {
-      res.status(200).json({ message: 'Lesson updated successfully', lesson });
-    } else {
-      res.status(404).send({ error: 'Lesson not found', id });
-    }
-  } catch (error) {
-    console.error('Error updating lesson:', error.message);
-    res.status(500).send({ error: 'Error updating lesson', details: error.message });
   }
 });
 

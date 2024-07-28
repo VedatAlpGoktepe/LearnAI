@@ -73,12 +73,12 @@ export class GenerationPageComponent {
     if (this.textPrompt.trim() !== '') {
       this.generated = false;
       this.error = false;
+      let token = sessionStorage.getItem('loggedIn');
+      let email = JSON.parse(token ? token : '').email;
 
       if (this.firstRequest === true) {
-        let token = sessionStorage.getItem('loggedIn');
-        let email = JSON.parse(token ? token : '').email;
 
-        this.httpClient.post<any>('http://localhost:3000/api/content/generate-lesson', { content: this.textPrompt, email: email }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
+        this.httpClient.post<any>('http://localhost:3000/api/content/generate-lesson', { content: this.textPrompt, email: email })
         .subscribe((response) => {
           this.generated = true;
           if (response.error) {
@@ -96,35 +96,21 @@ export class GenerationPageComponent {
         });
       }
       else {
-        this.httpClient.post<any>('http://localhost:3000/api/content/improve-lesson', { content: JSON.stringify(this.lesson.chats), userInput: this.textPrompt, email: "admin@gmail.com" }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
-        .subscribe((response) => {this.response = response}).add(() => {
+        this.httpClient.post<any>('http://localhost:3000/api/content/improve-lesson/' + this.id, { lesson: this.lesson, userInput: this.textPrompt, email: email })
+        .subscribe((response) => {
           this.generated = true;
-          let response_obj = JSON.parse(this.response);
-          if (response_obj.error) {
+        
+          if (response.error) {
             this.error = true;
             console.log('error');
             return;
           }
           else {
-            this.lesson.chats.push({
-              user: this.textPrompt,
-              response: {
-                readings: response_obj.readings,
-                flashcards: response_obj.flashcards,
-                quiz: response_obj.quiz
-              }
-            });
+            console.log("error here");
+            this.lesson = response.lesson;
             this.chats = this.lesson.chats;
-            this.httpClient.post<any>('http://localhost:3000/api/content/update-lesson/' + this.id, { content: this.lesson})
-            .subscribe((response) => {
-              if (!response.error) {
-                this.id = response.lesson._id;
-                this.lesson_saved.emit(this.id);
-              }
-              else {
-                console.log('Error updating lesson');
-              }
-            });
+            this.id = response.lesson._id;
+            this.lesson_saved.emit(this.id);
           }
         });
       }
