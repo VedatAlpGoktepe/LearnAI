@@ -2,7 +2,7 @@ import { Router } from 'express';
 import OpenAI from 'openai';
 import mongoose from 'mongoose';
 import Lesson from '../models/Lesson.js';
-import bodyParser from 'body-parser';
+import User from '../models/User.js';
 
 const openai = new OpenAI({
   apiKey: "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",
@@ -16,6 +16,19 @@ export const contentRouter = Router();
 
 contentRouter.post('/generate-lesson', async function (req, res, next) {
   const prompt = req.body.content;
+  const email = req.body.email;
+
+  try {
+    const user = await User.exists({ email: email });
+    if (!user) {
+      res.status(404).send({ error: 'User not found', email });
+      return;
+    }
+  } catch (error) {
+    console.error('An Error Occurred:', error.message);
+    res.status(500).send({ error: 'Error finding user', details: error.message });
+  }
+
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -85,6 +98,19 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
 contentRouter.post('/improve-lesson', async function (req, res, next) {
   const lessonData = req.body.content;
   const userInput = req.body.textPrompt;
+  const email = req.body.email;
+
+  try {
+    const user = await User.exists({ email: email });
+    if (!user) {
+      res.status(404).send({ error: 'User not found', email });
+      return;
+    }
+  } catch (error) {
+    console.error('An Error Occurred:', error.message);
+    res.status(500).send({ error: 'Error finding user', details: error.message });
+  }
+  
   try {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
@@ -152,7 +178,7 @@ contentRouter.post('/improve-lesson', async function (req, res, next) {
 
 contentRouter.post('/save-lesson', async function (req, res, next) {
   const lessonData = req.body.content;
-  lessonData.username = "admin";
+  lessonData.email = "admin@gmail.com";
   try {
     const lesson = await Lesson.create(lessonData);
     res.status(200).json({ message: 'Lesson saved successfully', lesson });
@@ -166,7 +192,7 @@ contentRouter.post('/update-lesson/:id', async function (req, res, next) {
   const lessonData = req.body.content;
   const id = req.params.id;
   try {
-    const lesson = await Lesson.findByIdAndUpdate(id, lessonData, { new: true }).exec();
+    const lesson = await Lesson.findByIdAndUpdate(id, lessonData, { new: true });
     if (lesson) {
       res.status(200).json({ message: 'Lesson updated successfully', lesson });
     } else {
@@ -195,7 +221,7 @@ contentRouter.get('/lessons/:id', async function (req, res, next) {
 
 contentRouter.get('/lessons', async function (req, res, next) {
   try {
-    const lessons = await Lesson.find({username: "admin"}, {title: 1}).sort({ updatedAt: -1 });
+    const lessons = await Lesson.find({email: "admin@gmail.com"}, {title: 1}).sort({ updatedAt: -1 });
     if (lessons) {
       res.status(200).json(lessons);
     } else {

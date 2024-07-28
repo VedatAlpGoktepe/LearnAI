@@ -63,7 +63,7 @@ export class GenerationPageComponent {
   
   response: string = '';
 
-  @Output() lesson_saved = new EventEmitter<void>();
+  @Output() lesson_saved = new EventEmitter<string>();
 
   constructor(private httpClient: HttpClient) {}
 
@@ -73,7 +73,7 @@ export class GenerationPageComponent {
         this.generated = false;
         this.error = false;
 
-        this.httpClient.post<any>('http://localhost:3000/api/content/generate-lesson', { content: this.textPrompt }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
+        this.httpClient.post<any>('http://localhost:3000/api/content/generate-lesson', { content: this.textPrompt, email: "admin@gmail.com" }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
         .subscribe((response) => {this.response = response}).add(() => {
           this.generated = true;
           let response_obj = JSON.parse(this.response);
@@ -88,7 +88,7 @@ export class GenerationPageComponent {
             .subscribe((response) => {
               if (!response.error) {
                 this.id = response.lesson._id;
-                this.lesson_saved.emit();
+                this.lesson_saved.emit(this.id);
               }
               else {
                 console.log('Error saving lesson');
@@ -102,7 +102,7 @@ export class GenerationPageComponent {
         this.generated = false;
         this.error = false;
 
-        this.httpClient.post<any>('http://localhost:3000/api/content/improve-lesson', { content: JSON.stringify(this.lesson.chats), userInput: JSON.stringify(this.textPrompt) }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
+        this.httpClient.post<any>('http://localhost:3000/api/content/improve-lesson', { content: JSON.stringify(this.lesson.chats), userInput: this.textPrompt, email: "admin@gmail.com" }, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
         .subscribe((response) => {this.response = response}).add(() => {
           this.generated = true;
           let response_obj = JSON.parse(this.response);
@@ -124,7 +124,8 @@ export class GenerationPageComponent {
             this.httpClient.post<any>('http://localhost:3000/api/content/update-lesson/' + this.id, { content: this.lesson})
             .subscribe((response) => {
               if (!response.error) {
-                this.lesson_saved.emit();
+                this.id = response.lesson._id;
+                this.lesson_saved.emit(this.id);
               }
               else {
                 console.log('Error updating lesson');
