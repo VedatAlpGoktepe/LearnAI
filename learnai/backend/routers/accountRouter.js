@@ -1,8 +1,10 @@
 import { Router } from 'express';
 import mongoose from 'mongoose';
 import User from '../models/User.js';
+import * as dotenv from "dotenv";
+dotenv.config()
 
-const uri = "mongodb+srv://vedatalpgktp:110110Aa@learnai-data.cw4z9hy.mongodb.net/?retryWrites=true&w=majority&appName=LearnAI-Data";
+const uri = process.env.MONGODB_URI;
 
 mongoose.connect(uri);
 

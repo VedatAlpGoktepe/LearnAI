@@ -3,12 +3,14 @@ import OpenAI from 'openai';
 import mongoose from 'mongoose';
 import Lesson from '../models/Lesson.js';
 import User from '../models/User.js';
+import * as dotenv from "dotenv";
+dotenv.config()
 
 const openai = new OpenAI({
-  apiKey: "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",
+  apiKey: process.env.OPENAI_API_KEY,
 });
 
-const uri = "mongodb+srv://vedatalpgktp:110110Aa@learnai-data.cw4z9hy.mongodb.net/?retryWrites=true&w=majority&appName=LearnAI-Data";
+const uri = process.env.MONGODB_URI;
 
 mongoose.connect(uri);
 

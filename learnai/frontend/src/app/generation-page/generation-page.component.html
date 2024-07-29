@@ -7,9 +7,9 @@
     </div>
     
     <div class="status-messages system-prompt">
-      <span *ngIf="!firstRequest && !generated">Generating...</span> <!-- replace with possible animation later -->
+      <span *ngIf="generating">Generating...</span> <!-- replace with possible animation later -->
       <span *ngIf="error">Sorry, something went wrong. Please try again.</span>
-      <span *ngIf="firstRequest">What would you like to learn?</span>
+      <span *ngIf="firstRequest && !generating">What would you like to learn?</span>
     </div>
   </div>
   <div class="user-input">

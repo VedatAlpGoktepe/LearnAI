@@ -60,7 +60,7 @@ export class GenerationPageComponent {
   chats: any = null;
   
   firstRequest = true;
-  generated = false;
+  generating = false;
   error = false;
   
   response: string = '';
@@ -71,7 +71,7 @@ export class GenerationPageComponent {
 
   generate(input: any) {
     if (this.textPrompt.trim() !== '') {
-      this.generated = false;
+      this.generating = true;
       this.error = false;
       let token = sessionStorage.getItem('loggedIn');
       let email = JSON.parse(token ? token : '').email;
@@ -80,7 +80,7 @@ export class GenerationPageComponent {
 
         this.httpClient.post<any>('http://localhost:3000/api/content/generate-lesson', { content: this.textPrompt, email: email })
         .subscribe((response) => {
-          this.generated = true;
+          this.generating = false;
           if (response.error) {
             this.error = true;
             console.error(response.error);
@@ -102,7 +102,7 @@ export class GenerationPageComponent {
       else {
         this.httpClient.post<any>('http://localhost:3000/api/content/improve-lesson/' + this.id, { lesson: this.lesson, userInput: this.textPrompt, email: email })
         .subscribe((response) => {
-          this.generated = true;
+          this.generating = false;
         
           if (response.error) {
             this.error = true;
@@ -131,7 +131,6 @@ export class GenerationPageComponent {
       this.httpClient.get<any>('http://localhost:3000/api/content/lessons/' + this.id, { headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
       .subscribe((response) => {
         this.firstRequest = false;
-        this.generated = true;
         this.lesson = response;
         this.chats = this.lesson.chats;
         this.lesson_saved.emit(this.id);
@@ -139,7 +138,6 @@ export class GenerationPageComponent {
     }
     else {
       this.firstRequest = true;
-      this.generated = false;
       this.error = false;
       this.response = '';
       this.lesson = null;

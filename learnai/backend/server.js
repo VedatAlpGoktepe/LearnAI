@@ -4,6 +4,10 @@ import bodyParser from "body-parser";
 import { contentRouter } from "./routers/contentRouter.js";
 import { accountRouter } from "./routers/accountRouter.js";
 import { twilioRouter } from "./routers/twilioRouter.js";
+import * as dotenv from "dotenv";
+dotenv.config({
+  path: "./.env",
+})
 
 export const app = express();
 const PORT = 3000;
