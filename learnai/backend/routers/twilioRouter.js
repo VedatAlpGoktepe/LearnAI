@@ -77,19 +77,19 @@ twilioRouter.post('/generate-lesson', async function (req, res, next) {
                 "question": "Question 1",
                 "options": [
                   {
-                    "answer": "Option 1"
+                    "answer": "Option 1",
                     "correct": false
                   },
                   {
-                    "answer": "Option 2"
+                    "answer": "Option 2",
                     "correct": true
                   },
                   {
-                    "answer": "Option 3"
+                    "answer": "Option 3",
                     "correct": false
                   },
                   {
-                    "answer": "Option 4"
+                    "answer": "Option 4",
                     "correct": false
                   },
                 ],
@@ -98,19 +98,19 @@ twilioRouter.post('/generate-lesson', async function (req, res, next) {
                 "question": "Question 2",
                 "options": [
                   {
-                    "answer": "Option 1"
+                    "answer": "Option 1",
                     "correct": false
                   },
                   {
-                    "answer": "Option 2"
+                    "answer": "Option 2",
                     "correct": false
                   },
                   {
-                    "answer": "Option 3"
+                    "answer": "Option 3",
                     "correct": false
                   },
                   {
-                    "answer": "Option 4"
+                    "answer": "Option 4",
                     "correct": true
                   },
                 ],
