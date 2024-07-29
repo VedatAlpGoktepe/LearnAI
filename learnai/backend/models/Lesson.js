@@ -76,5 +76,10 @@ lessonSchema.pre("save", function (next) {
   next();
 });
 
+lessonSchema.pre("update", function (next) {
+  this.updatedAt = Date.now();
+  next();
+});
+
 const Lesson = model("Lesson", lessonSchema);
 export default Lesson;

@@ -1,6 +1,6 @@
 declare var google: any;
 
-import { ChangeDetectionStrategy, Component, inject, model, signal } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, inject, model, signal } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { GenerationPageComponent } from "../generation-page/generation-page.component";
 import { MatSidenavModule } from '@angular/material/sidenav';
@@ -42,7 +42,7 @@ export class MainPageComponent {
 
   selected_lesson: string = '';
 
-  constructor(private httpClient: HttpClient) {}
+  constructor(private httpClient: HttpClient, private changeDetection: ChangeDetectorRef) {}
 
   toggleSidenav() {
     this.open = !this.open;
@@ -53,11 +53,24 @@ export class MainPageComponent {
   }
 
   refreshContent(id: string) {
-    this.selected_lesson = id;
-    let token = sessionStorage.getItem('loggedIn');
-    let email = JSON.parse(token ? token : '').email;
-    this.httpClient.get<any>('http://localhost:3000/api/content/lessons', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
-    .subscribe((response) => {this.past_lessons = response});
+    if (id === '-1') {
+      let token = sessionStorage.getItem('loggedIn');
+      let email = JSON.parse(token ? token : '').email;
+      this.httpClient.get<any>('http://localhost:3000/api/content/lessons', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
+      .subscribe((response) => {
+        this.past_lessons = response
+        this.changeDetection.detectChanges();
+      });
+    } else {
+      this.selected_lesson = id;
+      let token = sessionStorage.getItem('loggedIn');
+      let email = JSON.parse(token ? token : '').email;
+      this.httpClient.get<any>('http://localhost:3000/api/content/lessons', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
+      .subscribe((response) => {
+        this.past_lessons = response;
+        this.changeDetection.detectChanges();
+      });
+    }
   }
 
   selectLesson(id: string) {

@@ -87,11 +87,15 @@ export class GenerationPageComponent {
             return;
           }
           else {
-            this.lesson = response.lesson;
-            this.chats = this.lesson.chats;
-            this.id = response.lesson._id;
-            this.lesson_saved.emit(this.id);
-            this.firstRequest = false;
+            if (this.id === '') {
+              this.lesson = response.lesson;
+              this.chats = this.lesson.chats;
+              this.id = response.lesson._id;
+              this.lesson_saved.emit(this.id);
+              this.firstRequest = false;
+            } else {
+              this.lesson_saved.emit('-1');
+            }
           }
         });
       }
@@ -102,15 +106,17 @@ export class GenerationPageComponent {
         
           if (response.error) {
             this.error = true;
-            console.log('error');
             return;
           }
           else {
-            console.log("error here");
-            this.lesson = response.lesson;
-            this.chats = this.lesson.chats;
-            this.id = response.lesson._id;
-            this.lesson_saved.emit(this.id);
+            if (this.id === response.lesson._id) {
+              this.lesson = response.lesson;
+              this.chats = this.lesson.chats;
+              this.id = response.lesson._id;
+              this.lesson_saved.emit(this.id);
+            } else {
+              this.lesson_saved.emit('-1');
+            }
           }
         });
       }
@@ -126,6 +132,7 @@ export class GenerationPageComponent {
         this.generated = true;
         this.lesson = response;
         this.chats = this.lesson.chats;
+        this.lesson_saved.emit(this.id);
       });
     }
     else {

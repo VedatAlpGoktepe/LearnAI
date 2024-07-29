@@ -136,6 +136,7 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
 
       try {
         const lesson = await Lesson.create(lessonData);
+        lesson.save();
         res.status(200).json({ message: 'Lesson generated successfully', lesson });
         return;
       } catch (error) {
@@ -156,7 +157,7 @@ contentRouter.post('/generate-lesson', async function (req, res, next) {
 
 contentRouter.post('/improve-lesson/:id', async function (req, res, next) {
   const lessonData = req.body.lesson;
-  const userInput = req.body.textPrompt;
+  const userInput = req.body.userInput;
   const email = req.body.email;
 
   try {
@@ -206,13 +207,45 @@ contentRouter.post('/improve-lesson/:id', async function (req, res, next) {
             "quiz" : [
               {
                 "question": "Question 1",
-                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-                "answer": "1" // Index of the correct answer in the options array (0-3)
+                "options": [
+                  {
+                    "answer": "Option 1"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 2"
+                    "correct": true
+                  },
+                  {
+                    "answer": "Option 3"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 4"
+                    "correct": false
+                  },
+                ],
               },
               {
                 "question": "Question 2",
-                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-                "answer": "3"
+                "options": [
+                  {
+                    "answer": "Option 1"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 2"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 3"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 4"
+                    "correct": true
+                  },
+                ],
               },
               ...,
             ]
@@ -229,8 +262,6 @@ contentRouter.post('/improve-lesson/:id', async function (req, res, next) {
       let generated = completion.choices[0].message.content;
       let generatedParsed = JSON.parse(generated);
       let id = req.params.id;
-      
-      console.log('user input:', userInput);
 
       lessonData.chats.push({
         user: userInput,
@@ -243,6 +274,7 @@ contentRouter.post('/improve-lesson/:id', async function (req, res, next) {
 
       try {
         const lesson = await Lesson.findByIdAndUpdate(id, lessonData, { new: true });
+        lesson.save();
         if (lesson) {
           res.status(200).json({ message: 'Lesson improved successfully', lesson });
           return;
