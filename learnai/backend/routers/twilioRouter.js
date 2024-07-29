@@ -159,13 +159,13 @@ twilioRouter.post('/generate-lesson', async function (req, res, next) {
         }
       }
       if (failures.length === 0) {
-        res.status(200).json({ message: 'All lessons generated successfully', num_users: users.length });
+        res.status(200).send({ message: 'All lessons generated successfully', num_users: users.length });
         return;
       } else if (failures.length === users.length) {
         res.status(500).send({ error: 'Error saving lessons for all users', failures, generatedParsed });
         return;
       } else {
-        res.status(200).json({ message: 'Some lessons generated successfully', num_users: users.length, failures });
+        res.status(200).send({ message: 'Some lessons generated successfully', num_users: users.length, failures });
         return;
       }
     } else {
