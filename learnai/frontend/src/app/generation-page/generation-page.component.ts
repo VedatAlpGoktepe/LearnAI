@@ -134,6 +134,7 @@ export class GenerationPageComponent {
       let email = JSON.parse(token ? token : '').email;
       this.httpClient.get<any>(this.endpoint + '/api/content/lessons/' + this.id, { headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
       .subscribe((response) => {
+        this.generating = false;
         this.firstRequest = false;
         this.lesson = response;
         this.chats = this.lesson.chats;
