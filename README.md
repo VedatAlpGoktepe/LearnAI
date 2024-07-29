@@ -22,6 +22,7 @@ LearnAI is a web application designed to support your learning experience. Users
   
 - **Backend API:**
   - **[Express](https://expressjs.com/)** will be used as the core backend API.
+  - **[MongoDB](https://mongodb.com/)** will be used as the database.
   - The API will be designed to be **RESTful** where appropriate to ensure standard communication protocols.
 
 - **Deployment:**
@@ -41,9 +42,6 @@ LearnAI is a web application designed to support your learning experience. Users
 - **Webhook Interaction:**
   - A piece of the application will interact with a webhook by an external service. For example, if a user has connected their phone number to their account, using Twilio webhooks, the application can generate content for their accounts through text messages.
 
-- **Real-time Functionality:**
-  - The application will include real-time functionality, such as notifying user A, when user B has shared one of their generated courses with them, without needing to refresh the page. This can be achieved using WebSockets, SSE, or a similar technology to send updates in real-time.
-
 - **Long-running Task:**
   - The application will include functionality that executes a long-running task, such as generating various learning materials (text, diagrams, quizzes, etc.) through, and aggregating the data from third-party APIs such as GPT to provide a comprehensive learning experience. This task could take more than 10 seconds to complete.
 
@@ -55,25 +53,22 @@ LearnAI is a web application designed to support your learning experience. Users
 
 - **Beta Version**:
   - Enhanced AI content generation for project requirements
-  - Initial share/text functionality
   - User generated course history
   - Responsive design implementation
 
 - **Final Version**:
-  - Complete content generation with flashcards, quizzes, and images/diagrams when necessary
-  - Real-time updates/notifications for interaction between users and generation using webhooks
-  - User feedback mechanism
+  - Complete content generation with flashcards and quizzes
+  - Complete generation functionality using webhooks
   - Final bug fixes and performance improvements
 
 
 ### Tech Stack
 - **Frontend:** [Angular](https://angular.io/)
 - **Backend:** [Express](https://expressjs.com/), [Node.js](https://nodejs.org/)
-- **Database:** [PostgreSQL](https://www.postgresql.org/)
+- **Database:** [MongoDB](https://www.mongodb.com/)
 - **Deployment:** [Docker](https://www.docker.com/), [Docker Compose](https://docs.docker.com/compose/)
 - **AI Integration:** [GPT (OpenAI)](https://openai.com/api/)
 - **Authentication:** OAuth 2.0
-- **Real-time Updates:** WebSockets, SSE
 - **Webhooks:** Twilio
 - **OAuth 2.0:**
   - The application will implement **OAuth 2.0** for user authentication and authorization to secure access to the application.
