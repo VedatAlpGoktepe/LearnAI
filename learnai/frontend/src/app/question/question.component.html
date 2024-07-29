@@ -1,2 +1,4 @@
-<h1>{{question}}</h1>
-<p *ngFor="let option of options; let i = index">{{i==0? 'A: ': i==1?'B: ': i==2?'C: ': 'D: '}}{{option}}</p>
+<div class="question">
+  <h1 class="question_text">{{question}}</h1>
+  <button mat-button [ngClass]="{'selected': selectedId == i, 'right': option.correct, 'wrong': !option.correct}" class="selection" *ngFor="let option of options; let i=index" (click)="selectAnswer(i)">{{option.answer}}</button>
+</div>
