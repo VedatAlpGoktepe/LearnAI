@@ -45,7 +45,7 @@ twilioRouter.post('/generate-lesson', async function (req, res, next) {
     const completion = await openai.chat.completions.create({
       model: "gpt-4o-mini",
       messages: [
-        {role: "system", content: `Given the users prompt, find what topic the user wants to learn about.
+        {role: "system", content: `Given the users prompt, find what topic the user wants to learn about. If you cannot find a relevant topic to teach, respond with { "error": "No topic found" }
           You will generate as many readings required to teach the topic, with a minimum of 1 reading, with a minimum of 100 words per reading. The readings in the response should be in order of increasing difficulty or make sense to read in order.
           You will generate as many flashcards required to teach the topic, with a minimum of 3 flashcards. The flashcards in the response should be unordered/randomized.
           You will generate as many questions required to teach the topic, with a minimum of 5 questions. Make sure that there is only 1 correct answer. The questions in the response should be in order of increasing difficulty.
