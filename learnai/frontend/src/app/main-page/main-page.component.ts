@@ -15,6 +15,8 @@ import { LessonItemComponent } from "../lesson-item/lesson-item.component";
 import { NgFor } from '@angular/common';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../environment/environment';
+import { environmentProd } from '../../environment/environment.prod';
 
 export interface DialogData {
   number: string;
@@ -31,6 +33,7 @@ export interface DialogData {
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class MainPageComponent {
+  endpoint = environment.production ? environmentProd.apiEndpoint : environment.apiEndpoint;
   private router = inject(Router);
 
   open = false;
@@ -56,7 +59,7 @@ export class MainPageComponent {
     if (id === '-1') {
       let token = sessionStorage.getItem('loggedIn');
       let email = JSON.parse(token ? token : '').email;
-      this.httpClient.get<any>('http://localhost:3000/api/content/lessons', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
+      this.httpClient.get<any>(this.endpoint + '/api/content/lessons', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
       .subscribe((response) => {
         this.past_lessons = response
         this.changeDetection.detectChanges();
@@ -65,7 +68,7 @@ export class MainPageComponent {
       this.selected_lesson = id;
       let token = sessionStorage.getItem('loggedIn');
       let email = JSON.parse(token ? token : '').email;
-      this.httpClient.get<any>('http://localhost:3000/api/content/lessons', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
+      this.httpClient.get<any>(this.endpoint + '/api/content/lessons', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
       .subscribe((response) => {
         this.past_lessons = response;
         this.changeDetection.detectChanges();
@@ -80,7 +83,7 @@ export class MainPageComponent {
   deleteLesson(id: string) {
     let token = sessionStorage.getItem('loggedIn');
     let email = JSON.parse(token ? token : '').email;
-    this.httpClient.delete<any>('http://localhost:3000/api/content/lessons/' + id, {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
+    this.httpClient.delete<any>(this.endpoint + '/api/content/lessons/' + id, {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
     .subscribe((response) => {
       if (this.selected_lesson === id) {
         this.refreshContent('');
@@ -104,7 +107,7 @@ export class MainPageComponent {
     dialogRef.afterClosed().subscribe(result => {
       if (result !== undefined) {
         this.number.set(result);
-        this.httpClient.put<any>('http://localhost:3000/api/account/user/number', {number: this.number(), email: this.user.email})
+        this.httpClient.put<any>(this.endpoint + '/api/account/user/number', {number: this.number(), email: this.user.email})
         .subscribe((response) => {
           this.user = response.user;
         })
@@ -115,7 +118,7 @@ export class MainPageComponent {
   getUserInfo() {
     let token = sessionStorage.getItem('loggedIn');
     let email = JSON.parse(token ? token : '').email;
-    this.httpClient.get<any>('http://localhost:3000/api/account/user/', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
+    this.httpClient.get<any>(this.endpoint + '/api/account/user/', {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
     .subscribe((response) => {
       this.user = response.user
       if (this.user.number) {

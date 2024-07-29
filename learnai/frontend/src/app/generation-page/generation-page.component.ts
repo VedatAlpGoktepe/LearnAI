@@ -6,6 +6,8 @@ import { ReadingComponent } from "../reading/reading.component";
 import { FlashcardComponent } from '../flashcard/flashcard.component';
 import { QuestionComponent } from '../question/question.component';
 import { ChatComponent } from "../chat/chat.component";
+import { environment } from '../../environment/environment';
+import { environmentProd } from '../../environment/environment.prod';
 
 export class Lesson {
   title: string;
@@ -53,6 +55,8 @@ export class Lesson {
   styleUrl: './generation-page.component.scss'
 })
 export class GenerationPageComponent {
+  endpoint = environment.production ? environmentProd.apiEndpoint : environment.apiEndpoint;
+
   @Input() id = '';
   textPrompt = '';
 
@@ -78,7 +82,7 @@ export class GenerationPageComponent {
 
       if (this.firstRequest === true) {
 
-        this.httpClient.post<any>('http://localhost:3000/api/content/generate-lesson', { content: this.textPrompt, email: email })
+        this.httpClient.post<any>(this.endpoint + '/api/content/generate-lesson', { content: this.textPrompt, email: email })
         .subscribe((response) => {
           this.generating = false;
           if (response.error) {
@@ -100,7 +104,7 @@ export class GenerationPageComponent {
         });
       }
       else {
-        this.httpClient.post<any>('http://localhost:3000/api/content/improve-lesson/' + this.id, { lesson: this.lesson, userInput: this.textPrompt, email: email })
+        this.httpClient.post<any>(this.endpoint + '/api/content/improve-lesson/' + this.id, { lesson: this.lesson, userInput: this.textPrompt, email: email })
         .subscribe((response) => {
           this.generating = false;
         
@@ -128,7 +132,7 @@ export class GenerationPageComponent {
     if (this.id !== '') {
       let token = sessionStorage.getItem('loggedIn');
       let email = JSON.parse(token ? token : '').email;
-      this.httpClient.get<any>('http://localhost:3000/api/content/lessons/' + this.id, { headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
+      this.httpClient.get<any>(this.endpoint + '/api/content/lessons/' + this.id, { headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
       .subscribe((response) => {
         this.firstRequest = false;
         this.lesson = response;

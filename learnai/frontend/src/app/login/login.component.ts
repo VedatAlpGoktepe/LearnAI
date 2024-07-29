@@ -4,6 +4,8 @@ import { Component, inject, OnInit } from '@angular/core';
 import { HeaderComponent } from "../header/header.component";
 import { HttpClientModule, HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
+import { environment } from '../../environment/environment';
+import { environmentProd } from '../../environment/environment.prod';
 
 @Component({
   selector: 'app-login',
@@ -13,6 +15,8 @@ import { Router } from '@angular/router';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
+  endpoint = environment.production ? environmentProd.apiEndpoint : environment.apiEndpoint;
+  
   private router = inject(Router);
   
 
@@ -40,7 +44,7 @@ export class LoginComponent implements OnInit {
     if(response) {
       //decode token
       let token = JSON.parse(atob(response.credential.split('.')[1]));
-      this.httpClient.post<any>('http://localhost:3000/api/account/login', {token: token})
+      this.httpClient.post<any>(this.endpoint + '/api/account/login', {token: token})
       .subscribe(() => {
         //store token in current session
         sessionStorage.setItem('loggedIn', JSON.stringify(token));

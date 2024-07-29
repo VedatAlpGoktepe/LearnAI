@@ -9,7 +9,7 @@ on:
       - .github/workflows/build-backend.yml
 
 env: 
-  IMAGE_NAME: learnai-backend
+  IMAGE_NAME: project-connect-backend
 
 jobs:
   push:
