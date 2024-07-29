@@ -3,8 +3,8 @@ version: '3'
 services:
   backend:
     # build: ./backend
-    image: ghcr.io/utsc-cscc09-programming-on-the-web/project-connect-backend:main
-    container_name: learnai-backend
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/project-connect-backend:latest
+    container_name: project-connect-backend
     environment:
       OPENAI_API_KEY: ${OPENAI_API_KEY}
       MONGODB_URI: ${MONGODB_URI}
@@ -16,8 +16,8 @@ services:
 
   frontend:
     # build: ./frontend
-    image: ghcr.io/utsc-cscc09-programming-on-the-web/project-connect-frontend:main
-    container_name: learnai-frontend
+    image: ghcr.io/utsc-cscc09-programming-on-the-web/project-connect-frontend:latest
+    container_name: project-connect-frontend
     expose:
       - "80"
     restart: always
