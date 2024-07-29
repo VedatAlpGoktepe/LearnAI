@@ -75,4 +75,4 @@ LearnAI is a web application designed to support your learning experience. Users
 
 ### Final Submission
 - Deployed Website: https://utsc-learnai.tech/
-- Project Video Demo: https://youtu.be/jR_Xx_NaP8E
+- Website Demo: https://youtu.be/jR_Xx_NaP8E
