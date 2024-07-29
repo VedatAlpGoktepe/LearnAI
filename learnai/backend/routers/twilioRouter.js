@@ -75,13 +75,45 @@ twilioRouter.post('/generate-lesson', async function (req, res, next) {
             "quiz" : [
               {
                 "question": "Question 1",
-                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-                "answer": "1" // Index of the correct answer in the options array (0-3)
+                "options": [
+                  {
+                    "answer": "Option 1"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 2"
+                    "correct": true
+                  },
+                  {
+                    "answer": "Option 3"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 4"
+                    "correct": false
+                  },
+                ],
               },
               {
                 "question": "Question 2",
-                "options": ["Option 1", "Option 2", "Option 3", "Option 4"],
-                "answer": "3"
+                "options": [
+                  {
+                    "answer": "Option 1"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 2"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 3"
+                    "correct": false
+                  },
+                  {
+                    "answer": "Option 4"
+                    "correct": true
+                  },
+                ],
               },
               ...,
             ]

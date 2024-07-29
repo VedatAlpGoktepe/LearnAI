@@ -1,2 +1,10 @@
-<h1>Question: {{question}}</h1>
-<p>Answer: {{answer}}</p>
+<div class="flashcard" (click)="toggleFlip()">
+  <div class="flashcard_inner" [ngClass]="{'flipped': flipped}">
+    <div class="front">
+      <h3 class="content">{{ question }}</h3>
+    </div>
+    <div class="back">
+      <h3 class="content">{{ answer }}</h3>
+    </div>
+  </div>
+</div>

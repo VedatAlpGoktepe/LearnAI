@@ -52,14 +52,18 @@ const lessonSchema = new Schema({
               type: String,
               required: true,
             },
-            options: {
-              type: [String],
-              required: true,
-            },
-            answer: {
-              type: Number,
-              required: true,
-            },
+            options: [
+              {
+                answer: {
+                  type: String,
+                  required: true,
+                },
+                correct: {
+                  type: Boolean,
+                  required: true,
+                },
+              }
+            ],
           },
         ],
       }
