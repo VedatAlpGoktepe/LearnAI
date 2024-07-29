@@ -31,17 +31,17 @@ export class LoginComponent implements OnInit {
       client_id: '475894528162-m1t91fok6p6k6g1c3nvno6ou20d14cvb.apps.googleusercontent.com',
       callback: (response: any) => this.handleGoogleLogin(response)
     });
-    
-    google.accounts.id.renderButton(document.getElementById("google-btn"), {
-      theme: 'filled_blue',
-      size: 'large',
-      shape: 'rectangular',
-      locale: 'en'
-    });
   }
     
   handleGoogleLogin(response: any) {
     if(response) {
+      google.accounts.id.renderButton(document.getElementById("google-btn"), {
+        theme: 'filled_blue',
+        size: 'large',
+        shape: 'rectangular',
+        locale: 'en'
+      });
+      
       //decode token
       let token = JSON.parse(atob(response.credential.split('.')[1]));
       this.httpClient.post<any>(this.endpoint + '/api/account/login', {token: token})
