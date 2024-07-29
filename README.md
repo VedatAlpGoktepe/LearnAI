@@ -73,5 +73,6 @@ LearnAI is a web application designed to support your learning experience. Users
 - **OAuth 2.0:**
   - The application will implement **OAuth 2.0** for user authentication and authorization to secure access to the application.
 
-### Video Presentation
-[Project Video Demo](https://www.youtube.com/)
+### Final Submission
+[Deployed Website](https://utsc-learnai.tech/) (https://utsc-learnai.tech/)
+[Project Video Demo](https://www.youtube.com/) (https://youtu.be/jR_Xx_NaP8E)
