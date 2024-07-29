@@ -15,6 +15,7 @@ import { environmentProd } from '../../environment/environment.prod';
   styleUrl: './login.component.scss'
 })
 export class LoginComponent implements OnInit {
+  google_thing = google;
   endpoint = environment.production ? environmentProd.apiEndpoint : environment.apiEndpoint;
   
   private router = inject(Router);
@@ -38,6 +39,18 @@ export class LoginComponent implements OnInit {
       shape: 'rectangular',
       locale: 'en'
     });
+
+    if( this.google_thing === undefined) {
+      while (this.google_thing === undefined) {
+        this.google_thing = google;
+      }
+      google.accounts.id.renderButton(document.getElementById("google-btn"), {
+        theme: 'filled_blue',
+        size: 'large',
+        shape: 'rectangular',
+        locale: 'en'
+      });
+    }
   }
     
   handleGoogleLogin(response: any) {
