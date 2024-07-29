@@ -15,7 +15,7 @@ mongoose.connect(uri);
 export const twilioRouter = Router();
 
 twilioRouter.post('/generate-lesson', async function (req, res, next) {
-  const body = JSON.parse(req.body);
+  const body = req.body;
   const prompt = body.content;
   let number = body.number;
   // remove +1 from number if exists
