@@ -1,12 +1,25 @@
-.lesson-div {
-  width: 100%;
+.nav-item {
   min-height: 50px;
   height: fit-content;
-  padding: 5px;
   display: flex;
   align-items: center;
   background-color: #afafaf;
   border-bottom: 1px solid black;
+}
+
+.lesson-div {
+  min-height: 50px;
+  height: fit-content;
+  padding: 5px;
+  display: flex;
+  flex: 1;
+  align-items: center;
+  background-color: #afafaf;
+}
+
+.lesson-div:hover {
+  background-color: #9c9c9c;
+  cursor: pointer;
 }
 
 .lesson-title {
@@ -14,7 +27,22 @@
   font-size: 1rem;
 }
 
-.lesson-div:hover {
+.button-div {
+  min-height: 50px;
+  min-width: 50px;
+  padding: 5px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+.lesson-button {
+  margin: auto;
+}
+
+.button-div:hover {
+  color: red;
   background-color: #9c9c9c;
   cursor: pointer;
 }

@@ -300,16 +300,42 @@ contentRouter.post('/improve-lesson/:id', async function (req, res, next) {
 
 contentRouter.get('/lessons/:id', async function (req, res, next) {
   const id = req.params.id;
+  const email = req.headers.email;
   try {
     const lesson = await Lesson.findById(id);
     if (lesson) {
-      res.status(200).json(lesson);
+      if (lesson.email !== email) {
+        res.status(403).send({ error: 'Unauthorized access to lesson', id });
+      } else {
+        res.status(200).json(lesson);
+      }
     } else {
       res.status(404).send({ error: 'Lesson not found', id });
     }
   } catch (error) {
     console.error('Error fetching lesson:', error.message);
     res.status(500).send({ error: 'Error fetching lesson', details: error.message });
+  }
+});
+
+contentRouter.delete('/lessons/:id', async function (req, res, next) {
+  const id = req.params.id;
+  const email = req.headers.email;
+  try {
+    let lesson = await Lesson.findById(id);
+    if (lesson) {
+      if (lesson.email !== email) {
+        res.status(403).send({ error: 'Unauthorized access to lesson', id });
+        return;
+      }
+      lesson = await Lesson.findByIdAndDelete(id);
+      res.status(200).json({ message: 'Lesson deleted successfully', lesson });
+    } else {
+      res.status(404).send({ error: 'Lesson not found', id });
+    }
+  } catch (error) {
+    console.error('Error deleting lesson:', error.message);
+    res.status(500).send({ error: 'Error deleting lesson', details: error.message });
   }
 });
 

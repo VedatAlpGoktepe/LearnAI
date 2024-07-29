@@ -77,6 +77,19 @@ export class MainPageComponent {
     this.selected_lesson = id;
   }
 
+  deleteLesson(id: string) {
+    let token = sessionStorage.getItem('loggedIn');
+    let email = JSON.parse(token ? token : '').email;
+    this.httpClient.delete<any>('http://localhost:3000/api/content/lessons/' + id, {headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
+    .subscribe((response) => {
+      if (this.selected_lesson === id) {
+        this.refreshContent('');
+      } else {
+        this.refreshContent(this.selected_lesson);
+      }
+    });
+  }
+
   logout() {
     sessionStorage.removeItem('loggedIn');
     google.accounts.id.disableAutoSelect();

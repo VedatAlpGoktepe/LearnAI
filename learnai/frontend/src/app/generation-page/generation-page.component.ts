@@ -126,7 +126,9 @@ export class GenerationPageComponent {
 
   ngOnChanges() {
     if (this.id !== '') {
-      this.httpClient.get<any>('http://localhost:3000/api/content/lessons/' + this.id, { headers: {'Accept': 'text/html', 'responseType': 'text'}})
+      let token = sessionStorage.getItem('loggedIn');
+      let email = JSON.parse(token ? token : '').email;
+      this.httpClient.get<any>('http://localhost:3000/api/content/lessons/' + this.id, { headers: {'Accept': 'text/html', 'responseType': 'text', 'email': email}})
       .subscribe((response) => {
         this.firstRequest = false;
         this.generated = true;

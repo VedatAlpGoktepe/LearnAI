@@ -5,9 +5,8 @@
       <span class="sidenav-title-text">Past Lessons</span>
     </div>
     <div class="past-content">
-      <!-- <p *ngFor="let lesson of past_lessons">{{lesson.title}} {{lesson._id}}</p> -->
       <app-lesson-item *ngFor="let lesson of past_lessons" [title]="lesson.title"
-        [id]="lesson._id" (lesson_selected)="selectLesson($event)"></app-lesson-item>
+        [id]="lesson._id" (lesson_selected)="selectLesson($event)" (lesson_deleted)="deleteLesson($event)"></app-lesson-item>
     </div>
   </mat-sidenav>
   <mat-sidenav-container>
