@@ -13,7 +13,7 @@ export const app = express();
 const PORT = 3000;
 
 app.use(cors({
-  origin: process.env.NODE_ENV=='production'? "https://utsc-learnai.tech": "http://localhost:4200",
+  origin: [process.env.NODE_ENV=='production'? "https://utsc-learnai.tech": "http://localhost:4200", "https://www.twilio.com"],
 }));
 
 app.use(bodyParser.urlencoded({ extended: false }));
