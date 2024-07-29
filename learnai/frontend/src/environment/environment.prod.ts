@@ -1,3 +1,3 @@
 export const environmentProd = {
-  apiEndpoint: 'https://server.lifomation.tech',
+  apiEndpoint: 'https://server.utsc-learnai.tech',
 };
